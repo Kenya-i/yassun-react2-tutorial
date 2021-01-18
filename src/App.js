@@ -1,23 +1,33 @@
 import React from "react";
 import { List } from "./List";
+import { Form } from "./Form";
+import { LANGUAGES } from "./const/languages";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {description: "クリック前の表示"}
+    this.state = { tab: "list", langs: LANGUAGES }
   }
-  changeDescription() {
+
+  addLang(lang) {
     this.setState({
-      description: "クリック後の表示です"
-    })
+      tab: "list",
+      langs: [...this.state.langs, lang]
+    });
   }
   render() {
-    const {description} = this.state;
+    const { tab, langs } = this.state;
     return (
       <div>
-        { description }
-        <List title="取り扱い言語一覧"/>
-        <button onClick={() => this.changeDescription()}>ボタン</button>
+        <header>
+          <ul>
+            <li onClick={() => this.setState({tab: "list"})}>リストです</li>
+            <li onClick={() => this.setState({tab: "form"})}>フォームです</li>
+          </ul>
+        </header>
+        {
+          this.state.tab === "list" ? <List langs={langs} /> : <Form onAddLang={(lang) => this.addLang(lang)} />
+        }
       </div>
     )
   }
